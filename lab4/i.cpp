@@ -1,50 +1,56 @@
 #include <iostream>
 using namespace std;
 
-struct Tree {
+struct Node {
     int val;
-    Tree *left;
-    Tree *right;
-    int duplicate;
-    Tree (int key) {
+    Node *left;
+    Node *right;
+    int multiplicity;
+    Node (int key) {
         this -> val = key;
         this -> left = NULL;
         this -> right = NULL;
-        this -> duplicate = 1;
+        this -> multiplicity = 1;
     }
 };
 
 
 
-Tree* add(Tree* root, int key) {
+Node* add(Node* root, int key) {
 	if (root == NULL) {
-		return new Tree(key);
+		return new Node(key);
+
 	} else if(root->val == key) {
-        root->duplicate++;
+        root->multiplicity++;
     }
+
     else if (root->val > key) {
 		if (root->left == NULL) {
-			root->left = new Tree(key);
+			root->left = new Node(key);
 		} else {
 			root->left = add(root->left, key);
 		}
-	} else if (root->val < key) {
+	} 
+    
+    else if (root->val < key) {
 		if (root->right == NULL) {
-			root->right = new Tree(key);
+			root->right = new Node(key);
 		} else {
 			root->right = add(root->right, key);
 		}
 	}
 	return root;
 }
-Tree* getMin(Tree* root) {
+
+Node* getMin(Node* root) {
 	while (root->left != NULL) {
 		root = root->left;
 	}
 	return root;
 }
 
-Tree* find (Tree * root, int key) {
+
+Node* find (Node * root, int key) {
 	if (root == NULL) {
 		return NULL;
 	} else if (root->val == key) {
@@ -56,53 +62,58 @@ Tree* find (Tree * root, int key) {
 	}
 }
 
-Tree *remove(Tree * root, int key) {
+
+Node *remove(Node * root, int key) {
     if (root == NULL) {
         return NULL;
     }
+
     else if (root ->val > key) {
         root -> left = remove(root -> left, key);
         return root;
     }
+
     else if (root -> val < key) {
         root -> right = remove(root -> right, key);
         return root;
     }
+
     else if (root -> val == key) {
-        if (root -> duplicate == 0)  {
+        if (root -> multiplicity == 0)  {
             if (root -> left == NULL && root -> right == NULL) {
                 delete root;
                 return NULL;
             } else if (root -> right == NULL) {
-                Tree* temp = root->left;
+                Node* temp = root->left;
                 delete root;
                 return temp;
             } else if (root -> left == NULL) {
-                Tree* temp = root->right;
+                Node* temp = root->right;
                 delete root;
                 return temp;
             } else {
-                Tree* temp = getMin(root->right);
+                Node* temp = getMin(root->right);
                 root->val = temp->val;
                 root->right = remove(root->right, temp->val);
                 return root;
             }
         }
-        else root->duplicate--;
+        else root->multiplicity--;
         return root;
     }
     return NULL;
 }
 
-void solution (Tree* &root, int val, string s) {
+
+void solution (Node* &root, int val, string s) {
     if (s == "insert") {
         root = add(root, val);
     } else if (s == "delete") {
         root = remove(root, val);
     } else if (s == "cnt") {
-        Tree *finded = find(root, val);
+        Node *finded = find(root, val);
         if (finded == NULL) cout << 0 << "\n";
-        else cout << finded->duplicate << "\n";
+        else cout << finded->multiplicity << "\n";
     }
 
 }
@@ -110,7 +121,7 @@ void solution (Tree* &root, int val, string s) {
 int main () {
     int n;
     cin >> n;
-    Tree *root = NULL;
+    Node *root = NULL;
 
     for (int i = 0; i < n; i++) {
         string s;

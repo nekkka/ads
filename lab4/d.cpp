@@ -34,7 +34,7 @@ void insert(Node* &root, int key) {
     }
 }
 
-map<int,int>k; //[лвл, сумма]
+map<int,int>k; //[лвл, сумма] к[1]=4
 int mx=0; //макс лвл
 
 void search (Node* root, int key) {
