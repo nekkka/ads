@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 #include <cmath>
 using namespace std;
 
@@ -38,27 +37,25 @@ void insert(Node* &root, int key) {
     }
 }
 
-int leftHeight(Node *root) {
-    if (root == NULL) return 0;
-    return 1 + leftHeight(root->left);
-}
 
-int rightHeight(Node *root) {
-    if (root == NULL) return 0;
-    return 1 + rightHeight(root->right);
-}
 
 Node* constructBalancedBST(vector<int>& vec, int start, int end) {
     if (start > end) return NULL;
 
-    int mid = (start + end) / 2;
+    int mid = start + (end - start) / 2;
     Node* root = new Node(vec[mid]);
 
-    root->left = constructBalancedBST(vec, start, mid - 1);
-    root->right = constructBalancedBST(vec, mid + 1, end);
+    root->left = constructBalancedBST(vec, start, mid-1);
+    root->right = constructBalancedBST(vec, mid+1, end);
 
     return root;
 }
+void inOrder(Node* root, vector<int>& vec){
+        if (root == NULL) return;
+        inOrder(root -> left,vec);
+        vec.push_back(root -> data);
+        inOrder(root -> right,vec);
+    }
 
 int main() {
     Node *root = NULL;
@@ -68,21 +65,13 @@ int main() {
 
     for (int i = 0; i < pow(n,2)-1; i++) {
         int x;
-        cin >> x; vec.push_back(x);
+        cin >> x;
         insert(root, x);
     }
-    int left_height = leftHeight(root);
-    int right_height = rightHeight(root);
-    if (abs(left_height-right_height)<=1){
-        for (auto i : vec) {
-        cout << i << " ";
-    }
-    }
-    else{
-        sort(vec.begin(), vec.end());
-        Node* newroot = constructBalancedBST(vec, 0, vec.size() - 1);
-        print(newroot);
-    }
 
+    inOrder(root,vec);
+    Node* newroot = constructBalancedBST(vec, 0, vec.size() - 1);
+    print(newroot);
+    
 return 0;
 }
