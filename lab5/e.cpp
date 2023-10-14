@@ -4,6 +4,7 @@ using namespace std;
 
 struct MaxHeap {
     vector<long long> heap;
+   
     long long parent(long long i) {
         return (i - 1) / 2;
     }
@@ -53,21 +54,13 @@ struct MaxHeap {
             this->heapify(smallest);
         }
     }
-    void answer() {
-        long long answer;
-        while (heap.size() > 1) {
-            long long m1 = extractMax();
-            long long m2 = extractMax();
-            if (m1 == m2) {
-                continue;
-            }
-            else {
-                answer = m1 - m2;
-                insert(answer);
-            }
+    long long answer(int x) {
+        long long sum = 0;
+        if(heap.size() < x) x = heap.size();
+        for(int i = 0; i < x; i++) {
+            sum += heap[i];
         }
-        if (heap.size() == 0) cout << 0;
-        else cout << heap[0];
+        return sum;
     }
 
 };
@@ -76,13 +69,16 @@ struct MaxHeap {
 
 int main() {
     MaxHeap heap;
-    long long n; cin >> n;
+    long long n,m; cin >> n>>m;
     for (int i = 0; i < n; i++) {
-        int x; cin >> x;
-        heap.insert(x);
-    }
-
-    heap.answer();
-
-
+        string q;
+        cin>>q;
+        if(q=="print"){
+            cout<<heap.answer(m)<<endl;
+        }else{
+            int x;
+            cin>>x;
+            heap.insert(x);
+}
+}
 }
