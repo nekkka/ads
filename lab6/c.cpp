@@ -30,42 +30,31 @@ void quickSort(int arr[], int low, int high)
     }
 }
 
-void printArray(int arr[], int size)
+
+
+int main()
 {
-    int i;
-    for (i = 0; i < size; i++)
-        cout << arr[i] << " ";
-    cout << endl;
-}
-
-
-int main() {
-    int n; cin >> n;
-    int m; cin >> m;
-    int a[n], b[m];
+    int n;
+    cin >> n;
+    int arr[n];
     for (int i = 0; i < n; i++) {
-        cin >> a[i];
+        cin >> arr[i];
     }
-    for (int i = 0; i < m; i++) {
-        cin >> b[i];
-    }
+    quickSort(arr, 0, n - 1);
 
-    quickSort(a, 0, n - 1);
-    quickSort(b, 0, m - 1);
-    int i = 0;
-    int j = 0;
-    while(i != n && j != m) {
-        if(a[i] == b[j]) {
-            cout << b[j] << " ";
-            i++;
-            j++;
-        }
-        else if(a[i] <  b[j]) {
-            i++;
-        }
-        else if(a[i] > b[j]) {
-            j++;
-        }
+    int diff = 999999;
+
+    for (int i = 0; i < n - 1; i++) {
+       if (arr[i + 1] - arr[i] < diff){
+            diff = arr[i + 1] - arr[i];
+       }
+
+    }
+   for (int i = 0; i < n - 1; i++) {
+       if (arr[i + 1] - arr[i] == diff){
+            cout<<arr[i]<<" "<<arr[i+1]<<" ";
+       }
+
     }
 
     return 0;

@@ -33,25 +33,24 @@ void quickSort(vector<char> &str, int low, int high)
 
 int main() {
     int n; cin >> n;
-    string str; cin >> str;
-    vector <char> vowels;
-    vector <char> consonants;
-    for (int i = 0; i < str.size(); i++) {
-
-        if (str[i] == 'a' || str[i] == 'e' || str[i] == 'i' || str[i] == 'o' || str[i] == 'u') {
-            vowels.push_back(str[i]);
-        } else {
-            consonants.push_back(str[i]);
+    vector<char>v;
+    for (int i = 0; i < n; i++) {
+        char a;cin>>a;
+        v.push_back(a);
+    }
+    char c;cin>>c;
+    v.push_back(c);
+    quickSort(v, 0, n);
+    int index;
+    for(int i=0;i<n+1;i++){
+        if(v[i]==c){
+            index=i;
         }
     }
-
-    quickSort(vowels, 0, vowels.size() - 1);
-    quickSort(consonants, 0, consonants.size() - 1);
-
-    for (int i = 0; i < vowels.size(); i++) {
-        cout << vowels[i];
+    if(index==n){
+        cout<<v[0];
+    }else{
+        cout<<v[index+1];
     }
-    for (int i = 0; i < consonants.size(); i++) {
-        cout << consonants[i];
-    }
+    
 }
