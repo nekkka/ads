@@ -1,67 +1,78 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
 using namespace std;
-vector<string> merge(vector<string> v1, vector<string> v2, vector<string> v3) {
-	vector<string> result;
-	int l = 0, r = 0, k = 0;
-	while (l < v1.size() && r < v2.size() && k < v3.size()) {
-		if (v1[l] < v2[r] && v1[r] < v3[k]) {
-			result.push_back(v1[l]);
-			l++;
-		} else if(v2[r] < v3[k] && v2[r] < v1[l]) {
-			result.push_back(v2[r]);
-			r++;
-		}else {
-            result.push_back(v3[k]);
-            k++;
-        }
-	}
-	while (l < v1.size() && r < v2.size()) {
-		if(v1[l] < v2[r]){
-            result.push_back(v1[l]);
-		    l++;
-        }
-        else{
-            result.push_back(v2[r]);
-            r++;
-        }
-	}
-	while (l < v1.size() && k < v3.size()) {
-		if(v1[l] < v3[k]){
-            result.push_back(v1[l]);
-		    l++;
-        }
-        else{
-            result.push_back(v3[k]);
-            k++;
-        }
-	}
-	while (r < v2.size() && k < v3.size()) {
-		if(v2[r] < v3[k]){
-            result.push_back(v2[r]);
-		    r++;
-        }
-        else{
-            result.push_back(v3[k]);
-            k++;
-        }
-	}
-	while (r < v2.size()) {
-		result.push_back(v2[r]);
-		r++;
-	}
-	while (l < v1.size()) {
-		result.push_back(v1[l]);
-		l++;
-	}
-	while (k < v3.size()) {
-		result.push_back(v3[k]);
-		k++;
-	}
 
-	return result;
+
+void merge(vector<string> &a, int l1, int r1, int l2, int r2){
+    int n1 = r1 - l1 + 1;
+    string L[n1];
+    for(int i = 0; i < n1; i++){
+        L[i] = a[l1 + i];
+    }
+
+    int n2 = r2 - l2 + 1;
+    string R[n2];
+    for(int i = 0; i < n2; i++){
+        R[i] = a[l2 + i];
+    }
+
+
+    int i = l1;
+    int i1 = 0;
+    int i2 = 0;
+
+    while(i1 < n1 && i2 < n2){
+        if(L[i1].size() <= R[i2].size()){
+            a[i++] = L[i1++];
+        }
+        else{
+            a[i++] = R[i2++];
+        }
+    }
+
+    while(i1 < n1){
+        a[i++] = L[i1++];
+    }
+    while(i2 < n2){
+        a[i++] = R[i2++];
+    }
+
 }
-int main() {
-    
 
-    return 0;
+void msort(vector<string> &a, int l, int r){
+    if(l < r){
+        int mid = l + (r - l)/2;
+        msort(a, l, mid);
+        msort(a, mid + 1, r);
+        merge(a, l, mid, mid + 1, r);
+
+    }
+}
+
+
+int main () {
+    int n; cin >> n;
+
+    vector <string> result[n];
+
+    for(int i = 0; i < n; i++){
+        while (true) {
+            string x; cin >> x;
+            result[i].push_back(x);
+            if(cin.peek() == '\n'){
+                break;
+            }
+        }
+        msort(result[i], 0, result[i].size() - 1);
+        for (int j = 0; j < result[i].size(); j++) {
+            cout << result[i][j] << " ";
+        }
+        cout<<endl;
+
+
+
+    }
+
+
 }
