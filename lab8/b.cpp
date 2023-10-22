@@ -49,3 +49,22 @@ vector<int> rabinKarp(string s, string t) {
     return res;
 }
 
+int main() {
+    string s, t;
+    cin >> s >> t;
+    string pattern;
+    cin >> pattern;
+    vector<int> v1 = rabinKarp(s, pattern);
+    vector<int> v2 = rabinKarp(t, pattern);
+    int cnt = 0;
+    int l = 0;
+    int r = 0;
+    while(l < v1.size() && r < v2.size()) {
+        if(v1[l] == v2[r])cnt++;
+        if(v1[l] < v2[r])l++;
+        else r++;
+    }
+    cout << cnt << endl;
+    // cout << endl;
+    return 0;
+}
