@@ -5,7 +5,7 @@ using namespace std;
 long long MOD = 1e9 + 7;
 long long X = 11;
 
-long long getHash(string s) {
+long long Hashcode(string s) {
     long long hash = 0;
     long long curX = 1;
     for (int i = 0; i < s.size(); i++) {
@@ -26,12 +26,11 @@ int main(){
         string s;
         cin >> s;
         v.push_back(s);
-        m[s] = getHash(s);
+        m[s] = Hashcode(s);
     }
     for(int i = 0; i<v.size();i++){
         if(m.find(v[i]) != m.end()){
             cout<<"Hash of string \""<<v[i]<<"\" is "<<m[v[i]]<<endl;
         }
-        // cout<<item.first<<" --> "<<item.second<<endl;
-    }
+       }
 }
