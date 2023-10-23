@@ -7,7 +7,7 @@ using namespace std;
 long long MOD = 1e9 + 7;
 long long X = 31;
 
-long long hashStr(string s) {
+long long hashString(string s) {
     long long hash = 0;
     long long cur = 1;
     for (int i = 0; i < s.size(); i++) {
@@ -32,7 +32,7 @@ vector<long long> getPrefix(string s) {
 }
 
 vector<int> rabinKarp(string s, string t) {
-    long long small = hashStr(t);
+    long long small = hashString(t);
     vector<int> res;
     vector<long long> hashes = getPrefix(s);
     for (int i = 0; i < s.size() - t.size() + 1; i++) {
@@ -68,5 +68,5 @@ int main() {
     return 0;
 
 
-    
+
 }
