@@ -31,7 +31,6 @@ void getPrefix(string &s) {
 int rabinKarp(string &s, int &l, int &r) {
     long long small = hashString(s, l, r);
     int res = 0;
-    // vector<int> res;
     for (int i = 0; i < s.size() - r + l; i++) {
         long long dif = hashes[i + r - l];
         if (i != 0) {
