@@ -48,8 +48,6 @@ int rabinKarp(string &s, int &l, int &r) {
 
 
 int main() {
-    // freopen ("input.txt" , "r", stdin);
-    // freopen ("output.txt" , "w", stdout);
 
     string s;
     cin >> s;
@@ -62,7 +60,7 @@ int main() {
         cin >> l >> r;
         l--;
         r--;
-        // cout << t << endl;
+
         cout << rabinKarp(s, l, r) << endl;
     }
 }
