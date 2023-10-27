@@ -46,8 +46,6 @@ vector<int> rabinKarp(string s, string t) {
     return res;
 }
 int main() {
-    // freopen ("input.txt" , "r", stdin);
-    // freopen ("output.txt" , "w", stdout);
     int n;
     while(true){
         cin >> n;
@@ -74,6 +72,9 @@ int main() {
         }
 
     }
+
+
+
 
     return 0;
 }
