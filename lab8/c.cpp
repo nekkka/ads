@@ -1,23 +1,24 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-vector<long long> hashes;
+
 long long MOD = 1e9 + 7;
 long long X = 31;
 
 
-long long hashString(string &s) {
+
+long long getHash(string s) {
     long long hash = 0;
-    long long cur = 1;
+    long long curX = 1;
     for (int i = 0; i < s.size(); i++) {
-        long long curHash = ((s[i] - 96) * cur) % MOD;
+        long long curHash = (s[i] - 'a' + 1) * curX % MOD;
         hash = (hash + curHash) % MOD;
-        cur = (cur * X) % MOD;
+        curX = (curX * X) % MOD;
     }
     return hash;
 }
 
-vector<long long> getPrefix(string &s) {
+vector<long long> getPrefixHashes(string s) {
     vector<long long> hashes(s.size());
     long long curX = 1;
     for (int i = 0; i < s.size(); i++) {
@@ -30,49 +31,41 @@ vector<long long> getPrefix(string &s) {
     return hashes;
 }
 
-vector<int> rabinKarp(string &s, string &t) {
-    long long small = hashString(t);
+void rabinKarp(string s, string t, vector <size_t> &vec) {
+    long long smallHash = getHash(t);
     vector<int> res;
-    for (int i = 0; i < s.size() - t.size() + 1; i++) {
-        long long dif = hashes[i + t.size() - 1];
-        if (i != 0) {
-            dif -= hashes[i - 1];
-            if (dif < 0) dif += MOD;
-            small = (small * X) % MOD;
-        }
-        if (small == dif) {
-            res.push_back(i);
-        }
+    vector<long long> h = getPrefixHashes(s);
+    int m = t.size();
+    int n = s.size();
+    for (int i = 0; i < n - m + 1; i++) {
+        long long dif= h[i + m - 1];
+        if (i != 0) dif -= h[i - 1];
+        if (dif < 0) dif += MOD;
+        if (i != 0) smallHash = (smallHash * X) % MOD;
+        if (smallHash == dif) {
+            for (int j = i; j < i + t.size(); j++){
+                vec[j]++;
+            }
+        };
     }
-    return res;
 }
 
 
 int main() {
-    string s, t;
-    cin >> s;
-    hashes = getPrefix(s);
-    int n;
-    cin >> n;
-    vector<pair<int, bool> > res(s.size());
-    while(n--){
-        cin >> t;
-        vector<int> pos = rabinKarp(s, t);
 
-        for(int i = 0; i < pos.size(); i++){
-            for(int j = pos[i]; j < t.size() + pos[i]; j++){
-                res[j] = make_pair(j, true); 
-            }
-        }   
+    string s;
+    cin >> s;
+    vector<size_t> vec(s.size(), 0);
+    long long n; cin >> n;
+    for (int i = 0; i < n; i++) {
+        string patt; cin >> patt;
+        rabinKarp(s, patt, vec);
     }
 
-    for(int i = 0; i < res.size(); i++){
-        if(!res[i].second){
-            cout << "NO\n";
-            return 0;
+    for (int i = 0; i < vec.size(); i++) {
+        if (vec[i] == 0) {
+            cout << "NO"; return 0;
         }
     }
-
-    cout << "YES\n";
-    return 0;
+    cout << "YES" << endl;
 }
