@@ -1,80 +1,83 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 
-long long MOD = 1e9 + 7;
-long long X = 31;
+int rabinKarp(string s, string t){
+    size_t n = s.size();
+    size_t m = t.size();
+    int cnt = 0;
 
-long long hashString(string s) {
-    long long hash = 0;
-    long long cur = 1;
-    for (int i = 0; i < s.size(); i++) {
-        long long curHash = ((s[i] - 96) * cur) % MOD;
-        hash = (hash + curHash) % MOD;
-        cur = (cur * X) % MOD;
+    long long h[n];
+    long long p[n];
+    p[0] = 1;
+    long long q = 1e9 + 7;
+
+    for(size_t i = 1; i < n; i++){
+        p[i] = (p[i - 1] * 31) % q;
     }
-    return hash;
-}
 
-vector<long long> getPrefix(string s) {
-    vector<long long> hashes(s.size());
-    long long curX = 1;
-    for (int i = 0; i < s.size(); i++) {
-        hashes[i] = (s[i] - 'a' + 1) * curX % MOD;
-        if (i != 0) {
-            hashes[i] = (hashes[i] + hashes[i - 1]) % MOD;
-        }
-        curX = (curX * X) % MOD;
-    }
-    return hashes;
-}
-
-vector<int> rabinKarp(string s, string t) {
-    long long small = hashString(t);
-    vector<int> res;
-    vector<long long> hashes = getPrefix(s);
-    for (int i = 0; i < s.size() - t.size() + 1; i++) {
-        long long dif = hashes[i + t.size() - 1];
-        if (i != 0) {
-            dif -= hashes[i - 1];
-            if (dif < 0) dif += MOD;
-            small = (small * X) % MOD;
-        }
-        if (small == dif) {
-            res.push_back(i);
+    for(size_t i  = 0; i < n; i++){
+        h[i] = ((s[i] - int('a') + 1) * p[i]) % q;
+        if(i > 0){
+            h[i] = (h[i] + h[i - 1]) % q;
         }
     }
-    return res;
+
+    long long h_t = 0;
+    for(size_t i = 0; i < m; i++){
+        h_t = (h_t + ((t[i] - int('a') + 1) * p[i]) % q) % q;
+    }
+
+    for(size_t i = 0; i + m - 1 < n; i++){
+        long long d = h[i + m - 1];
+
+        if(i > 0){
+            d = (d - h[i - 1] + q) % q;
+        }
+
+        if(d == (h_t * p[i]) % q){
+            cnt++;
+        }
+    }
+
+    return cnt;
+
 }
-int main() {
-    int n;
+
+
+int main(){
+
+
     while(true){
-        cin >> n;
-        if(n == 0)break;
-        vector<pair<int, string> > res;
-        vector<string> k;
-        while(n--){
-            string s;
-            cin >> s;
-            k.push_back(s);
-        }
-        string m;
-        cin >> m;
-        int maxi = 0;
-        for(int i = 0; i < k.size(); i++){
-            vector<int> tmp = rabinKarp(m, k[i]);
-            if(tmp.size() > maxi)maxi = tmp.size();
-            if(tmp.size() == maxi)res.push_back(make_pair(tmp.size(), k[i]));
+        int n; cin >> n;
+        if(n == 0){
+            break;
         }
 
-        cout << maxi << endl;
-        for(int i = 0; i < res.size(); i++){
-            if(res[i].first == maxi)cout  << res[i].second << endl;
+        string patterns[n];
+        for(int i = 0; i < n; i++){
+            cin >> patterns[i];
         }
 
+        string text;
+        cin >> text;
+
+        int max = -1;
+        vector<pair<string,int> > v;
+
+        for(int i = 0; i < n; i++){
+            int c = rabinKarp(text, patterns[i]);
+            if(c > max){
+                max = c;
+            }
+            v.push_back(make_pair(patterns[i], c));
+        }
+
+        cout << max << endl;
+        for(int i = 0; i < v.size(); i++){
+            if(v[i].second == max){
+                cout << v[i].first << endl;
+            }
+        }
     }
-
-
-
-
-    return 0;
 }
