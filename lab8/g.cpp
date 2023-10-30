@@ -1,23 +1,24 @@
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
-long long MOD = 1e15 + 7;
-long long X = 31;
-vector<long long> hashes;
+long long MOD = 1e15 + 9;
+long long X = 97;
 
-long long hashString(string &s, int &l, int &r) {
+long long getHash(string s) {
     long long hash = 0;
-    long long cur = 1;
-    for (int i = l; i < r + 1; i++) {
-        long long curHash = ((s[i] - 96) * cur) % MOD;
+    long long curX = 1;
+    for (int i = 0; i < s.size(); i++) {
+        long long curHash = (s[i] - 'a' + 1) * curX % MOD;
         hash = (hash + curHash) % MOD;
-        cur = (cur * X) % MOD;
+        curX = (curX * X) % MOD;
     }
     return hash;
 }
 
-void getPrefix(string &s) {
+vector<long long> getPrefixHashes(string s) {
+    vector<long long> hashes(s.size());
     long long curX = 1;
     for (int i = 0; i < s.size(); i++) {
         hashes[i] = (s[i] - 'a' + 1) * curX % MOD;
@@ -26,40 +27,39 @@ void getPrefix(string &s) {
         }
         curX = (curX * X) % MOD;
     }
+    return hashes;
 }
 
-int rabinKarp(string &s, int &l, int &r) {
-    long long small = hashString(s, l, r);
-    int res = 0;
-    for (int i = 0; i < s.size() - r + l; i++) {
-        long long dif = hashes[i + r - l];
-        if (i != 0) {
-            dif -= hashes[i - 1];
-            if (dif < 0) dif += MOD;
-            small = (small * X) % MOD;
-        }
-        if (small == dif) {
-            res++;
-        }
+long long rabinKarp(string s, vector<long long> &hashes, string sub) {
+
+    long long smallHash = getHash(sub);
+
+    long long cnt = 0;
+    for (int i = 0; i < s.size() - sub.size() + 1; i++) {
+        long long hashDif = hashes[i + sub.size() - 1];
+        if (i != 0) hashDif -= hashes[i - 1];
+        if (hashDif < 0) hashDif += MOD;
+        if (i != 0) smallHash = (smallHash * X) % MOD;
+        if (smallHash == hashDif) {
+            cnt++;
+        };
     }
-    return res;
+    return cnt;
 }
+
 
 
 int main() {
-
-    string s;
-    cin >> s;
-    hashes.resize(s.size());
-    getPrefix(s);
-    int n;
-    cin >> n;
-    while(n--){
-        int l, r;
+    string s; cin >> s;
+    long long q; cin >> q;
+    vector <long long> hashes = getPrefixHashes(s);
+    for (int i = 0; i < q; i++){
+        long long l, r;
         cin >> l >> r;
-        l--;
-        r--;
+        string sub = s.substr(l - 1, r - l + 1);
 
-        cout << rabinKarp(s, l, r) << endl;
+        long long ans = rabinKarp(s, hashes, sub);
+        cout << ans << endl;
+
     }
 }
