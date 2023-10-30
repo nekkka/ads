@@ -1,36 +1,44 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 #include <unordered_map>
-
 using namespace std;
+
 long long MOD = 1e9 + 7;
 long long X = 11;
 
-long long Hashcode(string s) {
-    long long hash = 0;
+string getHash(string s) {
+    long long sumOfHash = 0;
     long long curX = 1;
     for (int i = 0; i < s.size(); i++) {
-        long long curHash = (s[i] - 47 ) * curX % MOD;
-        hash = (hash + curHash) % MOD;
+        long long curHash = (s[i] - 47) * curX % MOD;
+        sumOfHash = (sumOfHash + curHash) % MOD;
         curX = (curX * X) % MOD;
-    }
-    return hash;
+
+        }
+    return to_string(sumOfHash);
 }
 
+int main() {
+    int n; cin >> n;
+    vector <string> vec;
+    unordered_map <string, int> map;
 
-int main(){
-    int n;
-    cin>>n;
-    vector<string> v;
-    unordered_map<string, long long> m;
-    for(int i = 0; i < n*2; i++){
-        string s;
-        cin >> s;
-        v.push_back(s);
-        m[s] = Hashcode(s);
+
+    for (int i = 0; i < n * 2; i++) {
+        string s; cin >> s;
+        vec.push_back(s);
+        map[s] = 1;
     }
-    for(int i = 0; i<v.size();i++){
-        if(m.find(v[i]) != m.end()){
-            cout<<"Hash of string \""<<v[i]<<"\" is "<<m[v[i]]<<endl;
+
+    int cnt=0;
+    for (int i = 0; i < n * 2; i++) {
+        string t = getHash(vec[i]);
+        if(cnt == n) {
+            break;
         }
-       }
+        if(map[t] == 1) {
+            cout << "Hash of string \"" << vec[i] << "\" is " << t << endl;
+            cnt++;
+        }
+    }
 }
