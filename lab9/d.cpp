@@ -21,7 +21,7 @@ vector<int> prefixFunc(string s) {
 }
 
 bool kmp(string s, string t) {
-    s = t + '#' + s;
+    s = t + '#' +s;
     vector<int> res;
     vector<int> pi = prefixFunc(s);
     for (int i = 0; i < s.size(); i++) {
@@ -43,6 +43,7 @@ int main() {
     }
     vector<string> res;
     for(int i = 0; i < s.size(); i++){
+        //string tmp = " ";
         string tmp = "";
         tmp += toupper(s[i]);
         for(int j = i + 1; j < s.size(); j++ ){
