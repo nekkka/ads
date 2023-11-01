@@ -2,7 +2,7 @@
 #include <cctype>
 using namespace std;
 
-vector<int> prefixFun(string s) {
+vector<int> prefixFunc(string s) {
     vector<int> pi(s.size());
     pi[0] = 0;
     for (int i = 1; i < s.size(); i++) {
@@ -23,7 +23,7 @@ vector<int> prefixFun(string s) {
 bool kmp(string s, string t) {
     s = t + '#' + s;
     vector<int> res;
-    vector<int> pi = prefixFun(s);
+    vector<int> pi = prefixFunc(s);
     for (int i = 0; i < s.size(); i++) {
         if (pi[i] == t.size())return true;
     }
