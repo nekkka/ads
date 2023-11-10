@@ -1,29 +1,32 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
 using namespace std;
-vector<int> z_function(string s) {
-    vector<int> z(s.size());
-    
-    for (int i = 1, l = 0, r = 0; i < s.size(); i++) {
-        if (i <= r) z[i] = min(z[i - l], r - i + 1);
-        while (i + z[i] < s.size()) {
-            if (s[i + z[i]] == s[z[i]]) z[i]++;
-            else break;
-        }
-        if (z[i] > 0 && i + z[i] - 1 > r) {
-            l = i;
-            r = i + z[i] - 1;
-        }
-    }
-    return z;
+
+vector<int> prefix_function(string s) {
+  vector<int> pr(s.length());
+  for (int i = 1; i < s.length(); i++) {
+    int j = pr[i - 1];
+    while (j > 0 && s[i] != s[j]) j = pr[j - 1];
+    if (s[i] == s[j]) j++;
+    pr[i] = j;
+  }
+  return pr;
 }
+
 int main() {
     string s;
     cin >> s;
-    vector<int> v = z_function(s);
 
-    for(int i = 0; i < v.size(); i++){
-        cout << v[i] << ' ';
+    vector <int> pr = prefix_function(s);
+    int cnt = 0;
+    for (int i = 1; i < pr.size(); i++) {
+        if(i % 2 == 0) {
+            int k = i - pr[i - 1];
+            if((i / k) % 2 == 0) {
+                cnt++;
+            }
+        }
     }
-
-    return 0;
+    cout << cnt;
 }

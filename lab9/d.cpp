@@ -86,8 +86,8 @@ int main() {
     int n;
     cin >> n;
     int max = -1;
-    unordered_map<string, int> uwu;
-    vector <string> uwuuu;
+    unordered_map<string, int> mapa;
+    vector <string> ans_order;
     for (int i = 0; i < n; i++) {
         string x;
         cin >> x;
@@ -98,14 +98,14 @@ int main() {
                 continue;
             }
             max = ans;
-            uwuuu.push_back(x);
+            ans_order.push_back(x);
         }
-        uwu[x] = ans;
+        mapa[x] = ans;
     }
     int cnt = 0;
 
-    for (int i = 0; i < uwuuu.size(); i++) {
-        if(uwu[uwuuu[i]] == max) {
+    for (int i = 0; i < ans_order.size(); i++) {
+        if(mapa[ans_order[i]] == max) {
             cnt++;
         }
     }
@@ -115,9 +115,9 @@ int main() {
     }
     cout << cnt << endl;
 
-    for (int i = 0; i < uwuuu.size(); i++) {
-        if(uwu[uwuuu[i]] == max) {
-            cout << uwuuu[i] << endl;
+    for (int i = 0; i < ans_order.size(); i++) {
+        if(mapa[ans_order[i]] == max) {
+            cout << ans_order[i] << endl;
         }
     }
 }
