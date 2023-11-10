@@ -1,63 +1,123 @@
-#include <bits/stdc++.h>
-#include <cctype>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
 using namespace std;
 
-vector<int> prefixFunc(string s) {
-    vector<int> pi(s.size());
-    pi[0] = 0;
-    for (int i = 1; i < s.size(); i++) {
-        int j = pi[i - 1];
-        while (j > 0 && s[j] != s[i]) {
-            j = pi[j - 1];
+vector<int> prefix_function(string s) {
+  vector<int> pr(s.length());
+  for (int i = 1; i < s.length(); i++) {
+    int j = pr[i - 1];
+    while (j > 0 && s[i] != s[j]) j = pr[j - 1];
+    if (s[i] == s[j]) j++;
+    pr[i] = j;
+  }
+  return pr;
+}
+
+vector<int> kmp(string word, string patttern) {
+  vector<int> solve;
+  string concat = patttern + '%' + word;
+  vector<int> pr = prefix_function(concat);
+  for (int i = patttern.size() + 1; i < concat.size(); i++) {
+    if (pr[i] == patttern.size()) {
+            solve.push_back(i - 2 * patttern.size());
+            }
+    }
+        return solve;
+  }
+
+int longestPrefixSuffix(string s)
+{
+    int n = s.length();
+
+    int lps[n];
+    lps[0] = 0;
+
+    int len = 0;
+
+    int i = 1;
+    while (i < n)
+    {
+        if (s[i] == s[len])
+        {
+            len++;
+            lps[i] = len;
+            i++;
         }
-        if (s[j] == s[i]) {
-            pi[i] = j + 1;
-        } else {
-            pi[i] = 0;
+        else if (s[i] != s[len])
+        {
+            if (len != 0)
+            {
+                len = lps[len-1];
+
+            }
+            else
+            {
+                lps[i] = 0;
+                i++;
+            }
         }
     }
 
-    return pi;
+    int res = lps[n-1];
+    if(res>n/2){
+        res/=2;
+    }
+
+    return res;
 }
 
-bool kmp(string s, string t) {
-    s = t + '#' +s;
-    vector<int> res;
-    vector<int> pi = prefixFunc(s);
-    for (int i = 0; i < s.size(); i++) {
-        if (pi[i] == t.size())return true;
+string tolower(string s) {
+    for(int i=0; i<=s.size(); i++) {
+        if(s[i]>=65 && s[i]<=92) {
+            s[i]=s[i]+32;
+        }
     }
-    return false;
+    return s;
 }
+
 
 int main() {
-    string s;
-    cin >> s;
+
+    string text;
+    cin >> text;
     int n;
     cin >> n;
-    vector<string> v;
-    while(n--){
-        string t;
-        cin >> t;
-        v.push_back(t);
-    }
-    vector<string> res;
-    for(int i = 0; i < s.size(); i++){
-        //string tmp = " ";
-        string tmp = "";
-        tmp += toupper(s[i]);
-        for(int j = i + 1; j < s.size(); j++ ){
-            tmp += s[j];
+    int max = -1;
+    unordered_map<string, int> uwu;
+    vector <string> uwuuu;
+    for (int i = 0; i < n; i++) {
+        string x;
+        cin >> x;
+        string allstr = tolower(x) + "#" + tolower(text);
+        int ans = longestPrefixSuffix(allstr);
+        if(ans >= max){
+            if(ans == 0) {
+                continue;
+            }
+            max = ans;
+            uwuuu.push_back(x);
         }
-        for(int k = 0; k < v.size(); k++){
-            if(kmp(v[k], tmp))res.push_back(v[k]);
-        }
-        if(res.size() != 0)break;
+        uwu[x] = ans;
     }
-    cout << res.size() << endl;
-    for(int i = 0; i < res.size(); i++){
-        cout << res[i] << endl;
-    }
+    int cnt = 0;
 
-    return 0;
+    for (int i = 0; i < uwuuu.size(); i++) {
+        if(uwu[uwuuu[i]] == max) {
+            cnt++;
+        }
+    }
+    if(cnt == 0) {
+        cout << 0;
+        return 0;
+    }
+    cout << cnt << endl;
+
+    for (int i = 0; i < uwuuu.size(); i++) {
+        if(uwu[uwuuu[i]] == max) {
+            cout << uwuuu[i] << endl;
+        }
+    }
 }
