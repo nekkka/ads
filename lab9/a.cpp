@@ -1,51 +1,139 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
 using namespace std;
 
-vector<int> prefixFun(string s) {
-    vector<int> pi(s.size());
-    pi[0] = 0;
-    for (int i = 1; i < s.size(); i++) {
-        int j = pi[i - 1];
-        while (j > 0 && s[j] != s[i]) {
-            j = pi[j - 1];
-        }
-        if (s[j] == s[i]) {
-            pi[i] = j + 1;
-        } else {
-            pi[i] = 0;
-        }
-    }
-
-    return pi;
+vector<int> prefix_function(string s) {
+  vector<int> pr(s.length());
+  for (int i = 1; i < s.length(); i++) {
+    int j = pr[i - 1];
+    while (j > 0 && s[i] != s[j]) j = pr[j - 1];
+    if (s[i] == s[j]) j++;
+    pr[i] = j;
+  }
+  return pr;
 }
 
-bool kmp(string s, string t) {
-    s = t + '#' + s;
-    vector<int> res;
-    vector<int> pi = prefixFun(s);
-    for (int i = 0; i < s.size(); i++) {
-        if (pi[i] == t.size())return true;
+bool kmp(string word, string patttern) {
+  vector<int> solve;
+  string concat = patttern + '%' + word;
+  vector<int> pr = prefix_function(concat);
+  for (int i = patttern.size() + 1; i < concat.size(); i++) {
+    if (pr[i] == patttern.size()) {
+            solve.push_back(i - 2 * patttern.size());
+            return true;
+        }
     }
-    return false;
+        return false;
 }
+
+
+void KMPSearch(string pat, string txt,string a)
+{
+    vector<int> ans;
+    int M = pat.size();
+    int N = txt.size();
+    int ss = a.size();
+    int i = 0;
+    int j = 0;
+    int rec=0;
+    while (i<txt.size() && j<M) {
+
+        if(rec==0 && j==0 && txt[i]==pat[0]){
+            rec++;
+            j++;
+            if(rec==M){
+                cout<<1;
+                return;
+            }
+        }
+        else if(rec!=0 && txt[i]==pat[j]){
+
+            j++;
+            rec++;
+            if(rec==M){
+                int ans=0;
+                if((i+1)%ss!=0) ans=1;
+
+                cout<<((i+1)/ss)+ans;
+                return;
+            }
+        }
+        else if(rec!=0 && txt[i]!=pat[j]){
+            rec=0;
+            j=0;
+
+        }
+        if(txt.size()>M*2000)break;
+
+        i++;
+        if(i+1==txt.size()) txt+=a;
+    }
+    cout<<-1;
+}
+
+void computeLPSArray(string pat, int M, int* lps)
+{
+
+    int len = 0;
+
+    lps[0] = 0;
+
+    int i = 1;
+    while (i < M) {
+        if (pat[i] == pat[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        }
+        else
+        {
+            if (len != 0) {
+                len = lps[len - 1];
+
+            }
+            else
+            {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+}
+
 
 int main() {
-    string s, t;
-    cin >> s >> t;
-    
-    int cnt = 1;
+    string a;
+    cin >> a;
+    string b;
+    cin >> b;
+    string text = "";
+    int cnt = 0;
 
-    string tmp = s;
-    while(s.size() < t.size()){
-        s += tmp;
-        cnt++;
+    if(a.size() < b.size()) {
+        while(text.size() < b.size()) {
+            text += a;
+            cnt++;
+        }
+        if(kmp(text, b)) {
+            cout << cnt << endl;
+            return 0;
+        }
+        else {
+            cnt++;
+            text += a;
+            if(kmp(text, b)) {
+                cout << cnt << endl; return 0;
+            }
+            else cout << -1 << endl; return 0;
+        }
     }
-    if(kmp(s, t)){
-        cout << cnt;
+    else {
+        if(kmp(a, b)) {
+            cout << 1;
+            return 0;
+        }
+        else cout << -1 << endl; return 0;
     }
-    else if(kmp(s + tmp, t)){
-        cout << cnt + 1;
-    }
-    else cout << -1;
     return 0;
 }
