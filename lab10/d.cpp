@@ -2,10 +2,10 @@
 using namespace std;
 int n, m, q;
 vector<vector<int> > g;
-vector<int> color;
+vector<int> cr;
 vector<bool> vis;
 void bfs(int v){
-    if(color[v] == 1){
+    if(cr[v] == 1){
         cout << 0 << endl;
         return;
     }
@@ -20,7 +20,7 @@ void bfs(int v){
         for(int i = 0; i < g[u].size(); i++){
             int to = g[u][i];
             if(!vis[to]){
-                if(color[to] == 1){
+                if(cr[to] == 1){
                     cout << dis << endl;
                     return;
                 }
@@ -36,7 +36,7 @@ int main() {
     // freopen ("output.txt" , "w", stdout);
     cin >> n >> m >> q;
     g.resize(n);
-    color.resize(n);
+    cr.resize(n);
     vis.resize(n);
     for(int i = 0; i < m; i++){
         int u, v;
@@ -52,7 +52,7 @@ int main() {
         cin >> c >> ver;
         ver--;
         if(c == 1){
-            color[ver] = 1;
+            cr[ver] = 1;
         }
         else{
             bfs(ver);
