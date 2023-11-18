@@ -32,8 +32,6 @@ void bfs(int v){
     cout << -1 << endl;
 } 
 int main() {
-    // freopen ("input.txt" , "r", stdin);
-    // freopen ("output.txt" , "w", stdout);
     cin >> n >> m >> q;
     g.resize(n);
     cr.resize(n);
