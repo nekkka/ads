@@ -17,9 +17,5 @@ cout<<v.size()<<endl;
 for(auto i : v){
     cout<<i<<" ";
 }
-
-
-
-
 return 0;
 }
