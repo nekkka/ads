@@ -12,7 +12,6 @@ for(int i=0;i<m;i++){
     v[y].push_back(x);
 }
 
-
 int a,b;
 cin>>a>>b;
         unordered_map<int,bool> k;
@@ -41,11 +40,6 @@ cin>>a>>b;
             }
         }
         cout<<"NO";
-
-
-
-
-
 
 return 0;
 }
