@@ -22,7 +22,6 @@ vector<ll> gr[MAXN];
 ll par[MAXN];
 ll ans[MAXN];
 
-// Disjoint set data structure
 ll find(ll x){
     if (par[x] == x) return x;
     return par[x] = find(par[x]);
