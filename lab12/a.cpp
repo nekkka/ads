@@ -9,7 +9,6 @@ long long pos[500];
 bool was[500];
 
 int main(){
-    ios_base::sync_with_stdio(false);
     cin >> n;
     for (long long i = 0; i < n; i++){
         for (long long j = 0; j < n; j++){
