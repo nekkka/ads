@@ -34,11 +34,6 @@ bool merge(ll a, ll b){
 }
 
 int main(){
-    srand(time(NULL));
-    ios_base::sync_with_stdio(false); cin.tie(); cout.tie();
-
-
-
     cin >> n;
     for(int i=0;i<n;i++) par[i] = i;
     vector<pair<ll, pll>> edges;
