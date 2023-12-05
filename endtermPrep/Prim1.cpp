@@ -5,28 +5,28 @@ using namespace std;
 
 typedef pair<int, int> pii;
 
-vector<vector<pii>> adj; // adjacency list of the graph
-vector<bool> visited; // visited array to keep track of visited vertices
+vector<vector<pair<int, int>>> graph; 
+vector<bool> visited; 
 
 int prim(int start) {
-    int n = adj.size();
+    int n = graph.size();
     int mstWeight = 0;
-    priority_queue<pii, vector<pii>, greater<pii>> pq; // priority queue to select the next edge to add to the MST
+    priority_queue<pair<int, int>> pq;
 
-    pq.push(make_pair(0, start)); // start from the given vertex with weight 0
+    pq.push(make_pair(0, start));
 
     while (!pq.empty()) {
         int u = pq.top().second;
         int w = pq.top().first;
         pq.pop();
 
-        if (visited[u]) continue; // skip visited vertices
+        if (visited[u]) continue; 
         visited[u] = true;
         mstWeight += w;
 
-        for (auto& v : adj[u]) {
+        for (auto& v : graph[u]) {
             if (!visited[v.first]) {
-                pq.push(make_pair(v.second, v.first)); // add edges connected to the current vertex
+                pq.push(make_pair(v.second, v.first)); 
             }
         }
     }
